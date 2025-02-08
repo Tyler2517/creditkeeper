@@ -1,0 +1,22 @@
+[
+    {
+      "model": "customers.customer",
+      "pk": 1,
+      "fields": {
+        "owner": 1,
+        "name": "John Doe",
+        "email": "johndoe@example.com",
+        "credit": "100.00"
+      }
+    },
+    {
+      "model": "customers.customer",
+      "pk": 2,
+      "fields": {
+        "owner": 1,
+        "name": "Jane Smith",
+        "email": "janesmith@example.com",
+        "credit": "150.00"
+      }
+    }
+  ]

@@ -1,0 +1,18 @@
+[
+    {
+      "model": "customers.businessowner",
+      "pk": 1,
+      "fields": {
+        "username": "owner1",
+        "password": "password123"  
+      }
+    },
+    {
+      "model": "customers.businessowner",
+      "pk": 2,
+      "fields": {
+        "username": "owner2",
+        "password": "password123"  
+      }
+    }
+  ]
