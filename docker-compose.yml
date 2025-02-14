@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./credit_tracker
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - ./credit_tracker:/usr/src/app
+    ports:
+      - "8000:8000"
+  
+  frontend:
+    build: ./frontend
+    command: sh -c "npm i && npm run dev"
+    volumes:
+      - ./frontend:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    ports:
+      - "5173:5173"
+
+volumes:
+  node_modules: {}
