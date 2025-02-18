@@ -1,6 +1,7 @@
 // In your React app (e.g., frontend/src/components/CustomerList.tsx)
 import React, { useEffect, useState } from 'react';
-import { Customer } from '../types';// Adjust the import path based on where you defined your interface
+import { Link } from 'react-router-dom';
+import { Customer } from '../types'; // Adjust the import path based on where you defined your interface
 
 const CustomerList: React.FC = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
@@ -18,7 +19,11 @@ const CustomerList: React.FC = () => {
             <h1>Customer List</h1>
             <ul>
                 {customers.map(customer => (
-                    <li key={customer.id}>{customer.name} - Credit: {customer.credit}</li>
+                    <li key={customer.id}>
+                        <Link to={`/customers/${customer.id}`}>
+                            {customer.name} - Credit: {customer.credit}
+                        </Link>
+                    </li>
                 ))}
             </ul>
         </div>
