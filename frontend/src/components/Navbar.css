@@ -1,0 +1,29 @@
+/* frontend/src/components/Navbar.css */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* This will push the links to the right */
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+  }
+  
+  .navbar-logo img {
+    height: 60px; /* Increase the height here */
+    margin-right: 1rem;
+  }
+  
+  .navbar-links {
+    display: flex; /* To align the links horizontally */
+    gap: 1rem; /* Adds space between the links */
+  }
+  
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  
+  .navbar-links a:hover {
+    text-decoration: underline;
+  }
