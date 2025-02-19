@@ -1,8 +1,8 @@
 // frontend/src/components/Navbar.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css'; // Create this file if you want to add custom styles
-import logo from '../assets/logo-c.png'; // Adjust the path as necessary
+import './Navbar.css'; 
+import logo from '../assets/logo-c.png'; 
 
 const Navbar: React.FC = () => {
   return (

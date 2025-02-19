@@ -1,13 +1,12 @@
-// In your React app (e.g., frontend/src/components/CustomerList.tsx)
+// frontend/src/components/CustomerList.tsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Customer } from '../types'; // Adjust the import path based on where you defined your interface
+import { Customer } from '../types';
 
 const CustomerList: React.FC = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
 
     useEffect(() => {
-        // Adjust the URL as needed based on your backend configuration
         fetch('/api/customers/')
             .then(response => response.json())
             .then(data => setCustomers(data))

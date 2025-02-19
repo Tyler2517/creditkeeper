@@ -2,20 +2,20 @@
 .navbar {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* This will push the links to the right */
+    justify-content: space-between; 
     padding: 1rem;
     background-color: #333;
     color: white;
   }
   
   .navbar-logo img {
-    height: 60px; /* Increase the height here */
+    height: 60px; 
     margin-right: 1rem;
   }
   
   .navbar-links {
-    display: flex; /* To align the links horizontally */
-    gap: 1rem; /* Adds space between the links */
+    display: flex; 
+    gap: 1rem;
   }
   
   .navbar-links a {
