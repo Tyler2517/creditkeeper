@@ -21,5 +21,5 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/customers/', views.customer_list, name='customer_list'),
-    path('api/customers/<int:customer_id>/', views.customer_detail, name='customer_detail'),  # New line
+    path('api/customers/<int:customer_id>/', views.customer_detail, name='customer_detail'),
 ]

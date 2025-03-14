@@ -1,10 +1,11 @@
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Customer
+from .models import Customer, BusinessOwner
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
+
 
 @csrf_exempt
 @require_http_methods(["GET", "PUT"])
@@ -35,6 +36,34 @@ def customer_detail(request, customer_id):
             'credit': str(customer.credit)
         })
 
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
 def customer_list(request):
-    customers = list(Customer.objects.values())
-    return JsonResponse(customers, safe=False)  # Return the list of customers as JSON
+    if request.method == "GET":
+        customers = list(Customer.objects.values())
+        return JsonResponse(customers, safe=False)
+    
+    elif request.method == "POST":
+        data = json.loads(request.body)
+        # Assuming you have a way to get the current business owner
+        # You might need to adjust this based on your authentication system
+        business_owner = BusinessOwner.objects.first()  # This is a placeholder
+        
+        try:
+            new_customer = Customer.objects.create(
+                owner=business_owner,
+                name=data['name'],
+                email=data['email'],
+                credit=data['credit']
+            )
+            
+            return JsonResponse({
+                'id': new_customer.id,
+                'name': new_customer.name,
+                'email': new_customer.email,
+                'credit': str(new_customer.credit)
+            }, status=201)
+        except KeyError as e:
+            return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
