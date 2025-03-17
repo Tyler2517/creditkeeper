@@ -5,6 +5,7 @@ from .models import Customer, BusinessOwner
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 
 
 @csrf_exempt
@@ -40,8 +41,20 @@ def customer_detail(request, customer_id):
 @require_http_methods(["GET", "POST"])
 def customer_list(request):
     if request.method == "GET":
-        customers = list(Customer.objects.values())
-        return JsonResponse(customers, safe=False)
+        page_size = int(request.GET.get('page_size', 10))
+        page_number = int(request.GET.get('page', 1))
+        
+        all_customers = Customer.objects.all().order_by('id')
+        paginator = Paginator(all_customers, page_size)
+        customers_page = paginator.get_page(page_number)
+        
+        customers_data = list(customers_page.object_list.values())
+        return JsonResponse({
+            'customers': customers_data,
+            'total_pages': paginator.num_pages,
+            'current_page': page_number,
+            'total_customers': paginator.count,
+        }, safe=False)
     
     elif request.method == "POST":
         data = json.loads(request.body)
