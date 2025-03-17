@@ -118,5 +118,185 @@
       "email": "amanda@example.com",
       "credit": "160.25"
     }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 13,
+    "fields": {
+      "owner": 1,
+      "name": "Sarah Johnson",
+      "email": "sarah@example.com",
+      "credit": "125.50"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 14,
+    "fields": {
+      "owner": 2,
+      "name": "David Williams",
+      "email": "david@example.com",
+      "credit": "210.75"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 15,
+    "fields": {
+      "owner": 1,
+      "name": "Lisa Brown",
+      "email": "lisa@example.com",
+      "credit": "185.25"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 16,
+    "fields": {
+      "owner": 2,
+      "name": "Daniel Miller",
+      "email": "daniel@example.com",
+      "credit": "230.00"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 17,
+    "fields": {
+      "owner": 1,
+      "name": "Karen Davis",
+      "email": "karen@example.com",
+      "credit": "140.25"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 18,
+    "fields": {
+      "owner": 2,
+      "name": "Matthew Wilson",
+      "email": "matthew@example.com",
+      "credit": "195.75"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 19,
+    "fields": {
+      "owner": 1,
+      "name": "Nancy Thompson",
+      "email": "nancy@example.com",
+      "credit": "165.50"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 20,
+    "fields": {
+      "owner": 2,
+      "name": "Steven Clark",
+      "email": "steven@example.com",
+      "credit": "250.00"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 21,
+    "fields": {
+      "owner": 1,
+      "name": "Laura Martinez",
+      "email": "laura@example.com",
+      "credit": "135.75"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 22,
+    "fields": {
+      "owner": 2,
+      "name": "Kevin Rodriguez",
+      "email": "kevin@example.com",
+      "credit": "215.25"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 23,
+    "fields": {
+      "owner": 1,
+      "name": "Patricia Lewis",
+      "email": "patricia@example.com",
+      "credit": "170.00"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 24,
+    "fields": {
+      "owner": 2,
+      "name": "George Walker",
+      "email": "george@example.com",
+      "credit": "225.50"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 25,
+    "fields": {
+      "owner": 1,
+      "name": "Elizabeth Hall",
+      "email": "elizabeth@example.com",
+      "credit": "145.25"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 26,
+    "fields": {
+      "owner": 2,
+      "name": "Joseph Allen",
+      "email": "joseph@example.com",
+      "credit": "235.75"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 27,
+    "fields": {
+      "owner": 1,
+      "name": "Sandra Young",
+      "email": "sandra@example.com",
+      "credit": "155.50"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 28,
+    "fields": {
+      "owner": 2,
+      "name": "Richard King",
+      "email": "richard@example.com",
+      "credit": "280.00"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 29,
+    "fields": {
+      "owner": 1,
+      "name": "Donna Wright",
+      "email": "donna@example.com",
+      "credit": "130.25"
+    }
+  },
+  {
+    "model": "customers.customer",
+    "pk": 30,
+    "fields": {
+      "owner": 2,
+      "name": "Charles Lopez",
+      "email": "charles@example.com",
+      "credit": "205.75"
+    }
   }
 ]
