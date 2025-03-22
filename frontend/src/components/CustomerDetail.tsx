@@ -290,7 +290,7 @@ const CustomerDetail: React.FC = () => {
     };
 
     // Example of handling note changes
-    const handleNoteChange = (e) => {
+    const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (customer) {
             setCustomer({
                 ...customer,
