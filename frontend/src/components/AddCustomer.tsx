@@ -7,6 +7,7 @@ const AddCustomer: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [credit, setCredit] = useState('');
+    const [note, setNote] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -17,7 +18,7 @@ const AddCustomer: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, credit: parseFloat(credit) }),
+                body: JSON.stringify({ name, email, credit: parseFloat(credit), note }),
             });
 
             if (!response.ok) {
