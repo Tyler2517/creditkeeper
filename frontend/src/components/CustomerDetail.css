@@ -161,3 +161,118 @@
     font-family: inherit;
     resize: vertical;
   }
+  /* Transaction popup styling */
+.transaction-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.transaction-popup {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 400px;
+  max-width: 90vw; /* Use viewport width to ensure it stays on screen */
+  max-height: 90vh; /* Use viewport height to prevent vertical overflow */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  animation: popup-appear 0.3s ease-out;
+  overflow: auto; /* Add scrolling if content is too large */
+}
+
+/* Ensure the form group and input are properly contained */
+.transaction-popup .form-group {
+  margin: 15px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.transaction-popup input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box; /* This ensures padding doesn't add to the width */
+}
+
+/* Make sure all text content wraps properly */
+.transaction-popup p {
+  margin: 10px 0;
+  word-wrap: break-word; /* Allow long words to break */
+  overflow-wrap: break-word;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.popup-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.popup-actions .save-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.popup-actions .save-button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.popup-actions .cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Transaction history styling */
+.transaction-history {
+  margin-top: 30px;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.transaction-table th, 
+.transaction-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.transaction-table th {
+  background-color: #f5f5f5;
+  font-weight: 500;
+}
+
+.transaction-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.transaction-table .positive {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.transaction-table .negative {
+  color: #f44336;
+  font-weight: 500;
+}

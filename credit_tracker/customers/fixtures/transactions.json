@@ -1,0 +1,112 @@
+[
+    {
+      "model": "customers.transaction",
+      "pk": 1,
+      "fields": {
+        "customer": 1,
+        "previous_credit": "0.00",
+        "new_credit": "100.00",
+        "description": "Initial credit",
+        "created_at": "2025-03-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 2,
+      "fields": {
+        "customer": 1,
+        "previous_credit": "100.00",
+        "new_credit": "150.00",
+        "description": "Bonus credit for loyalty",
+        "created_at": "2025-03-21T14:35:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 3,
+      "fields": {
+        "customer": 1,
+        "previous_credit": "150.00",
+        "new_credit": "100.00",
+        "description": "Purchase - Premium service",
+        "created_at": "2025-03-22T09:15:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 4,
+      "fields": {
+        "customer": 2,
+        "previous_credit": "0.00",
+        "new_credit": "150.00",
+        "description": "Initial credit",
+        "created_at": "2025-03-20T11:30:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 5,
+      "fields": {
+        "customer": 2,
+        "previous_credit": "150.00",
+        "new_credit": "120.00",
+        "description": "Basic service fee",
+        "created_at": "2025-03-22T16:45:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 6,
+      "fields": {
+        "customer": 3,
+        "previous_credit": "0.00",
+        "new_credit": "200.00",
+        "description": "Initial credit",
+        "created_at": "2025-03-19T09:00:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 7,
+      "fields": {
+        "customer": 3,
+        "previous_credit": "200.00",
+        "new_credit": "250.00",
+        "description": "Referral bonus",
+        "created_at": "2025-03-21T13:20:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 8,
+      "fields": {
+        "customer": 3,
+        "previous_credit": "250.00",
+        "new_credit": "200.00",
+        "description": "Premium service subscription",
+        "created_at": "2025-03-23T10:15:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 9,
+      "fields": {
+        "customer": 4,
+        "previous_credit": "0.00",
+        "new_credit": "175.50",
+        "description": "Initial credit",
+        "created_at": "2025-03-19T14:45:00Z"
+      }
+    },
+    {
+      "model": "customers.transaction",
+      "pk": 10,
+      "fields": {
+        "customer": 5,
+        "previous_credit": "0.00",
+        "new_credit": "300.00",
+        "description": "Initial premium membership",
+        "created_at": "2025-03-18T16:30:00Z"
+      }
+    }
+  ]

@@ -4,21 +4,36 @@ import { useNavigate } from 'react-router-dom';
 import './AddCustomer.css'; // Create this file for styling
 
 const AddCustomer: React.FC = () => {
+    // Existing state variables
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [credit, setCredit] = useState('');
     const [note, setNote] = useState('');
+    // New state variables
+    const [showTransactionPopup, setShowTransactionPopup] = useState(false);
+    const [transactionDescription, setTransactionDescription] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Show popup to get transaction description
+        setShowTransactionPopup(true);
+    };
+
+    const submitCustomerWithTransaction = async () => {
         try {
             const response = await fetch('/api/customers/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, credit: parseFloat(credit), note }),
+                body: JSON.stringify({ 
+                    name, 
+                    email, 
+                    credit: parseFloat(credit), 
+                    note,
+                    transaction_description: transactionDescription || 'Initial credit' 
+                }),
             });
 
             if (!response.ok) {
@@ -33,6 +48,40 @@ const AddCustomer: React.FC = () => {
             alert('Failed to add customer. Please try again.');
         }
     };
+
+    // Add this transaction popup component
+    const TransactionPopup = () => (
+        <div className="transaction-popup-overlay">
+            <div className="transaction-popup">
+                <h3>Transaction Details</h3>
+                <p>Please provide a description for this initial credit of ${credit}</p>
+                <div className="form-group">
+                    <label htmlFor="transactionDescription">Description</label>
+                    <input
+                        type="text"
+                        id="transactionDescription"
+                        value={transactionDescription}
+                        onChange={(e) => setTransactionDescription(e.target.value)}
+                        placeholder="e.g., Initial store credit"
+                    />
+                </div>
+                <div className="popup-actions">
+                    <button 
+                        className="submit-button" 
+                        onClick={submitCustomerWithTransaction}
+                    >
+                        Submit
+                    </button>
+                    <button 
+                        className="cancel-button"
+                        onClick={() => setShowTransactionPopup(false)}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
 
     return (
         <div className="add-customer-container">
@@ -98,6 +147,7 @@ const AddCustomer: React.FC = () => {
                     </div>
                 </form>
             </div>
+            {showTransactionPopup && <TransactionPopup />}
         </div>
     );
 };

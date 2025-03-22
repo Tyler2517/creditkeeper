@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Customer, BusinessOwner
+from .models import Customer, BusinessOwner, Transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
@@ -28,11 +28,24 @@ def customer_detail(request, customer_id):
 
     elif request.method == "PUT":
         data = json.loads(request.body)
+        previous_credit = customer.credit
+        
         customer.name = data.get('name', customer.name)
         customer.email = data.get('email', customer.email)
-        customer.credit = data.get('credit', customer.credit)
+        new_credit = data.get('credit', customer.credit)
+        customer.credit = new_credit
         customer.note = data.get('note', customer.note)
         customer.save()
+        
+        # Create transaction record if credit changed
+        if previous_credit != new_credit:
+            Transaction.objects.create(
+                customer=customer,
+                previous_credit=previous_credit,
+                new_credit=new_credit,
+                description=data.get('transaction_description', 'Credit adjustment')
+            )
+            
         return JsonResponse({
             'id': customer.id,
             'name': customer.name,
@@ -80,7 +93,15 @@ def customer_list(request):
                 name=data['name'],
                 email=data['email'],
                 credit=data['credit'],
-                note=data['note']
+                note=data.get('note', '')
+            )
+            
+            # Create initial transaction record
+            Transaction.objects.create(
+                customer=new_customer,
+                previous_credit=0,
+                new_credit=new_customer.credit,
+                description=data.get('transaction_description', 'Initial credit')
             )
             
             return JsonResponse({
@@ -94,3 +115,25 @@ def customer_list(request):
             return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+        
+@csrf_exempt
+@require_http_methods(["GET"])
+def customer_transactions(request, customer_id):
+    try:
+        customer = Customer.objects.get(id=customer_id)
+        transactions = Transaction.objects.filter(customer=customer).order_by('-created_at')
+        transactions_data = []
+        
+        for transaction in transactions:
+            transactions_data.append({
+                'id': transaction.id,
+                'previous_credit': float(transaction.previous_credit),
+                'new_credit': float(transaction.new_credit),
+                'credit_change': float(transaction.new_credit) - float(transaction.previous_credit),
+                'description': transaction.description,
+                'created_at': transaction.created_at.isoformat()
+            })
+        
+        return JsonResponse(transactions_data, safe=False)
+    except Customer.DoesNotExist:
+        return JsonResponse({'error': 'Customer not found'}, status=404)
