@@ -58,9 +58,7 @@ def customer_list(request):
     
     elif request.method == "POST":
         data = json.loads(request.body)
-        # Assuming you have a way to get the current business owner
-        # You might need to adjust this based on your authentication system
-        business_owner = BusinessOwner.objects.first()  # This is a placeholder
+        business_owner = BusinessOwner.objects.first()
         
         try:
             new_customer = Customer.objects.create(
