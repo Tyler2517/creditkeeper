@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
+from django.db import models
 
 
 @csrf_exempt
@@ -43,8 +44,17 @@ def customer_list(request):
     if request.method == "GET":
         page_size = int(request.GET.get('page_size', 10))
         page_number = int(request.GET.get('page', 1))
+        search_term = request.GET.get('search', '')
         
+        # Filter customers based on search term
         all_customers = Customer.objects.all().order_by('id')
+        if search_term:
+            all_customers = all_customers.filter(
+                # Case-insensitive search on name or email
+                models.Q(name__icontains=search_term) | 
+                models.Q(email__icontains=search_term)
+            )
+        
         paginator = Paginator(all_customers, page_size)
         customers_page = paginator.get_page(page_number)
         
@@ -55,6 +65,7 @@ def customer_list(request):
             'current_page': page_number,
             'total_customers': paginator.count,
         }, safe=False)
+        
     
     elif request.method == "POST":
         data = json.loads(request.body)

@@ -14,7 +14,8 @@ const CustomerList: React.FC = () => {
 
     const fetchCustomers = () => {
         setIsLoading(true);
-        fetch(`/api/customers/?page=${currentPage}&page_size=${pageSize}`)
+        const searchParam = searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : '';
+        fetch(`/api/customers/?page=${currentPage}&page_size=${pageSize}${searchParam}`)
             .then(response => response.json())
             .then(data => {
                 // Check if data.customers exists, otherwise use data directly
@@ -33,7 +34,7 @@ const CustomerList: React.FC = () => {
 
     useEffect(() => {
         fetchCustomers();
-    }, [currentPage, pageSize]);
+    }, [currentPage, pageSize, searchTerm]);
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
