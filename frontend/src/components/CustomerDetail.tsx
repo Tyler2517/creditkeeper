@@ -87,9 +87,12 @@ const CustomerDetail: React.FC = () => {
     };
 
     // Update the handleSave function to check for credit changes
+    // Update the handleSave function to check specifically what changed
     const handleSave = () => {
+        if (!customer) return;
+        
         // Check if credit has changed
-        if (customer && previousCredit !== customer.credit) {
+        if (previousCredit !== parseFloat(String(customer.credit))) {
             // Show the transaction popup to collect description
             setShowTransactionPopup(true);
         } else {
@@ -116,6 +119,8 @@ const CustomerDetail: React.FC = () => {
             
             const data = await response.json();
             setCustomer(data);
+            // Update previousCredit to match the saved credit value
+            setPreviousCredit(parseFloat(data.credit));
             setIsEditing(false);
         } catch (error: any) {
             console.error('Error updating customer data:', error);
@@ -151,6 +156,8 @@ const CustomerDetail: React.FC = () => {
             
             const data = await response.json();
             setCustomer(data);
+            // Update previousCredit to match the saved credit value
+            setPreviousCredit(parseFloat(data.credit));
             setIsEditing(false);
             
             // Refresh transactions
@@ -193,7 +200,7 @@ const CustomerDetail: React.FC = () => {
         <div className="transaction-popup-overlay">
         <div className="transaction-popup">
             <h3>Credit Change</h3>
-            <p><strong>Credit changing from ${previousCredit.toFixed(2)} to ${newCredit.toFixed(2)}</strong></p>
+            <p><strong>Credit changing from ${parseFloat(previousCredit.toString()).toFixed(2)} to ${parseFloat(newCredit.toString()).toFixed(2)}</strong></p>
             <p>Please provide a reason for this change:</p>
             <div className="form-group">
             <label htmlFor="transactionDescription">Description</label>
@@ -282,6 +289,16 @@ const CustomerDetail: React.FC = () => {
     setTransactionDescription('');
     };
 
+    // Example of handling note changes
+    const handleNoteChange = (e) => {
+        if (customer) {
+            setCustomer({
+                ...customer,
+                note: e.target.value
+            });
+        }
+    };
+
     return (
         <div className="customer-detail-container">
             <div className="customer-detail-header">
@@ -335,7 +352,7 @@ const CustomerDetail: React.FC = () => {
                                 id="note"
                                 name="note"
                                 value={customer.note || ''}
-                                onChange={handleInputChange}
+                                onChange={handleNoteChange}
                                 disabled={!isEditing}
                                 rows={4}
                             />
