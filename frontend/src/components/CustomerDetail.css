@@ -152,3 +152,12 @@
   .error-message button {
     margin-top: 15px;
   }
+
+  textarea.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    resize: vertical;
+  }

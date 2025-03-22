@@ -9,3 +9,4 @@ class Customer(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     credit = models.DecimalField(max_digits=10, decimal_places=2)
+    note = models.TextField(null=True, blank=True)

@@ -4,4 +4,5 @@ export interface Customer {
     name: string;
     email: string;
     credit: number; 
+    note?: string;
 }

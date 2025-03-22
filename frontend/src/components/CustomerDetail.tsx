@@ -31,7 +31,9 @@ const CustomerDetail: React.FC = () => {
             });
     }, [id]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
         setCustomer(prevState => ({
             ...prevState!,
@@ -165,6 +167,21 @@ const CustomerDetail: React.FC = () => {
                             <div className="form-value credit-value">
                                 ${parseFloat(customer.credit.toString()).toFixed(2)}
                             </div>
+                        )}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="note">Notes</label>
+                        {isEditing ? (
+                            <textarea
+                                id="note"
+                                name="note"
+                                value={customer.note || ''}
+                                onChange={handleInputChange}
+                                rows={4}
+                                className="form-control"
+                            />
+                        ) : (
+                            <p>{customer.note || 'No notes added yet.'}</p>
                         )}
                     </div>
                 </div>

@@ -22,7 +22,8 @@ def customer_detail(request, customer_id):
             'id': customer.id,
             'name': customer.name,
             'email': customer.email,
-            'credit': str(customer.credit)
+            'credit': str(customer.credit),
+            'note': customer.note
         })
 
     elif request.method == "PUT":
@@ -30,12 +31,14 @@ def customer_detail(request, customer_id):
         customer.name = data.get('name', customer.name)
         customer.email = data.get('email', customer.email)
         customer.credit = data.get('credit', customer.credit)
+        customer.note = data.get('note', customer.note)
         customer.save()
         return JsonResponse({
             'id': customer.id,
             'name': customer.name,
             'email': customer.email,
-            'credit': str(customer.credit)
+            'credit': str(customer.credit),
+            'note': customer.note
         })
 
 @csrf_exempt
@@ -76,14 +79,16 @@ def customer_list(request):
                 owner=business_owner,
                 name=data['name'],
                 email=data['email'],
-                credit=data['credit']
+                credit=data['credit'],
+                note=data['note']
             )
             
             return JsonResponse({
                 'id': new_customer.id,
                 'name': new_customer.name,
                 'email': new_customer.email,
-                'credit': str(new_customer.credit)
+                'credit': str(new_customer.credit),
+                'note': new_customer.note
             }, status=201)
         except KeyError as e:
             return JsonResponse({'error': f'Missing required field: {str(e)}'}, status=400)

@@ -90,7 +90,7 @@ const AddCustomer: React.FC = () => {
                         <button 
                             type="button" 
                             className="cancel-button"
-                            onClick={() => navigate('/customers')}
+                            onClick={() => navigate(-1)}
                         >
                             Cancel
                         </button>
