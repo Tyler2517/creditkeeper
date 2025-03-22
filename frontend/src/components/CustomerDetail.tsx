@@ -1,17 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Customer } from '../types';
+import './CustomerDetail.css';
 
 const CustomerDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [customer, setCustomer] = useState<Customer | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        setIsLoading(true);
         fetch(`/api/customers/${id}/`)
-            .then(response => response.json())
-            .then(data => setCustomer(data))
-            .catch(error => console.error('Error fetching customer data:', error));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Customer not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setCustomer(data);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching customer data:', error);
+                setError(error.message);
+                setIsLoading(false);
+            });
     }, [id]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +40,7 @@ const CustomerDetail: React.FC = () => {
     };
 
     const handleSave = () => {
+        setIsLoading(true);
         fetch(`/api/customers/${id}/`, {
             method: 'PUT',
             headers: {
@@ -30,60 +48,157 @@ const CustomerDetail: React.FC = () => {
             },
             body: JSON.stringify(customer)
         })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update customer');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setCustomer(data);
+                setIsEditing(false);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error('Error updating customer data:', error);
+                setError(error.message);
+                setIsLoading(false);
+            });
+    };
+
+    const handleCancel = () => {
+        // Revert changes
+        fetch(`/api/customers/${id}/`)
             .then(response => response.json())
             .then(data => {
                 setCustomer(data);
                 setIsEditing(false);
             })
-            .catch(error => console.error('Error updating customer data:', error));
+            .catch(error => console.error('Error fetching customer data:', error));
     };
 
-    if (!customer) return <div>Loading...</div>;
+    const handleBack = () => {
+        navigate('/customers');
+    };
 
-    return (
-        <div>
-            <h1>Customer Detail</h1>
-            {isEditing ? (
-                <div>
-                    <label>
-                        Name:
-                        <input
-                            type="text"
-                            name="name"
-                            value={customer.name}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
-                        Email:
-                        <input
-                            type="email"
-                            name="email"
-                            value={customer.email}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
-                        Credit:
-                        <input
-                            type="number"
-                            name="credit"
-                            value={customer.credit}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <button onClick={handleSave}>Save</button>
-                </div>
-            ) : (
-                <div>
-                    <p>Name: {customer.name}</p>
-                    <p>Email: {customer.email}</p>
-                    <p>Credit: {customer.credit}</p>
-                    <button onClick={() => setIsEditing(true)}>Edit</button>
-                </div>
-            )}
+    if (isLoading && !customer) return (
+        <div className="customer-detail-container">
+            <div className="loading-spinner">Loading customer details...</div>
         </div>
     );
-}
+
+    if (error) return (
+        <div className="customer-detail-container">
+            <div className="error-message">
+                <h2>Error</h2>
+                <p>{error}</p>
+                <button className="back-button" onClick={handleBack}>Back to Customers</button>
+            </div>
+        </div>
+    );
+
+    if (!customer) return (
+        <div className="customer-detail-container">
+            <div className="error-message">
+                <h2>Customer Not Found</h2>
+                <p>The requested customer could not be found.</p>
+                <button className="back-button" onClick={handleBack}>Back to Customers</button>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="customer-detail-container">
+            <div className="customer-detail-header">
+                <h1>Customer Details</h1>
+                <button className="back-button" onClick={handleBack}>
+                    Back to List
+                </button>
+            </div>
+
+            <div className="customer-detail-card">
+                <div className="customer-id">Customer ID: {customer.id}</div>
+                
+                <div className="customer-form">
+                    <div className="form-group">
+                        <label>Name:</label>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="name"
+                                value={customer.name}
+                                onChange={handleInputChange}
+                                className="form-input"
+                            />
+                        ) : (
+                            <div className="form-value">{customer.name}</div>
+                        )}
+                    </div>
+
+                    <div className="form-group">
+                        <label>Email:</label>
+                        {isEditing ? (
+                            <input
+                                type="email"
+                                name="email"
+                                value={customer.email}
+                                onChange={handleInputChange}
+                                className="form-input"
+                            />
+                        ) : (
+                            <div className="form-value">{customer.email}</div>
+                        )}
+                    </div>
+
+                    <div className="form-group">
+                        <label>Credit Balance:</label>
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                name="credit"
+                                value={customer.credit}
+                                onChange={handleInputChange}
+                                className="form-input"
+                                step="0.01"
+                            />
+                        ) : (
+                            <div className="form-value credit-value">
+                                ${parseFloat(customer.credit.toString()).toFixed(2)}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="action-buttons">
+                    {isEditing ? (
+                        <>
+                            <button 
+                                className="save-button" 
+                                onClick={handleSave}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'Saving...' : 'Save Changes'}
+                            </button>
+                            <button 
+                                className="cancel-button" 
+                                onClick={handleCancel}
+                                disabled={isLoading}
+                            >
+                                Cancel
+                            </button>
+                        </>
+                    ) : (
+                        <button 
+                            className="edit-button" 
+                            onClick={() => setIsEditing(true)}
+                        >
+                            Edit Customer
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default CustomerDetail;
