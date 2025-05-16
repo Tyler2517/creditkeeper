@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Customer } from '../types';
 import './Analystics.css';
+import * as XLSX from 'xlsx';
 
 const Analytics: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -105,6 +106,69 @@ const Analytics: React.FC = () => {
     );
   };
 
+const exportToExcel = async () => {
+        // Filter only selected customers
+        const selectedCustomerData = customers.filter(customer => 
+            selectedCustomers.includes(customer.id)
+        );
+        
+        if (selectedCustomerData.length === 0) {
+            alert('Please select at least one customer to export');
+            return;
+        }
+        
+        // Create a new workbook
+        const workbook = XLSX.utils.book_new();
+        
+        // Add the main customers sheet
+        const customersWorksheet = XLSX.utils.json_to_sheet(selectedCustomerData);
+        XLSX.utils.book_append_sheet(workbook, customersWorksheet, 'Customers');
+        
+        // Set loading state
+        setIsLoading(true);
+        
+        try {
+            // Fetch and add transaction history for each selected customer
+            for (const customer of selectedCustomerData) {
+            const response = await fetch(`/api/customers/${customer.id}/transactions/`);
+            
+            if (!response.ok) {
+                console.error(`Failed to fetch transactions for customer ${customer.id}`);
+                continue;
+            }
+            
+            const transactions = await response.json();
+            
+            if (transactions && transactions.length > 0) {
+                // Format transaction data for better readability
+                const formattedTransactions = transactions.map((t: any) => ({
+                Date: new Date(t.created_at).toLocaleString(),
+                Description: t.description,
+                'Previous Credit': `$${parseFloat(t.previous_credit).toFixed(2)}`,
+                'New Credit': `$${parseFloat(t.new_credit).toFixed(2)}`,
+                'Change': `$${(parseFloat(t.new_credit) - parseFloat(t.previous_credit)).toFixed(2)}`
+                }));
+                
+                // Create a worksheet for this customer's transactions
+                const transactionSheet = XLSX.utils.json_to_sheet(formattedTransactions);
+                
+                // Add the sheet to the workbook with a name that includes the customer's name
+                const sheetName = `${customer.name.substring(0, 20)} Transactions`; // Limit name length for Excel
+                XLSX.utils.book_append_sheet(workbook, transactionSheet, sheetName);
+            }
+            }
+            
+            // Generate the file and trigger download
+            XLSX.writeFile(workbook, 'customer_data_with_transactions.xlsx');
+            
+        } catch (error) {
+            console.error('Error exporting data:', error);
+            alert('An error occurred while exporting data');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
   return (
     <div className="analytics-container">
       <div className="analytics-header">
@@ -147,6 +211,13 @@ const Analytics: React.FC = () => {
                 </select>
                 <span>entries</span>
               </div>
+                <button 
+                    className="export-button" 
+                    onClick={exportToExcel}
+                    disabled={selectedCustomers.length === 0}
+                    >
+                    Export Selected to Excel
+                </button>
             </div>
             
             <table className="customer-table">
