@@ -5,6 +5,8 @@ import CustomerDetail from './components/CustomerDetail';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import AddCustomer from './components/AddCustomer';
+import Analytics from './components/Analystics';
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/customers" element={<CustomerList />} />
         <Route path="/customers/:id" element={<CustomerDetail />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/add-customer" element={<AddCustomer />} />
       </Routes>
     </Router>
