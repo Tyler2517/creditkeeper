@@ -169,6 +169,16 @@ const exportToExcel = async () => {
         }
     };
 
+    // Add this function to your Analytics component
+    const handleSelectAll = () => {
+      if (selectedCustomers.length === customers.length) {
+        // If all are selected, unselect all
+        setSelectedCustomers([]);
+      } else {
+        // Otherwise select all
+        setSelectedCustomers(customers.map(customer => customer.id));
+      }
+    };  
   return (
     <div className="analytics-container">
       <div className="analytics-header">
@@ -223,7 +233,13 @@ const exportToExcel = async () => {
             <table className="customer-table">
               <thead>
                 <tr>
-                  <th>Select</th>
+                  <th>
+                    <input
+                      type="checkbox"
+                      checked={selectedCustomers.length === customers.length && customers.length > 0}
+                      onChange={handleSelectAll}
+                    />
+                  </th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Credit</th>
