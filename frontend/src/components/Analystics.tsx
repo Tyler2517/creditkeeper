@@ -136,6 +136,26 @@ const Analytics: React.FC = () => {
     );
   };
 
+  const copySelectedEmails = () => {
+    const selectedEmails = customers
+      .filter(customer => selectedCustomers.includes(customer.id))
+      .map(customer => customer.email)
+      .join('; ');
+      
+    if (selectedEmails.length === 0) {
+      alert('Please select at least one customer to copy emails');
+      return;
+    }
+    navigator.clipboard.writeText(selectedEmails)
+      .then(() => {
+        alert('Emails copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy emails: ', err);
+        alert('Failed to copy emails to clipboard');
+      });
+};
+
 const exportToExcel = async () => {
         // Filter only selected customers
         const selectedCustomerData = customers.filter(customer => 
@@ -237,13 +257,15 @@ const exportToExcel = async () => {
             
             <div className="table-controls">
               {renderSearchInput()}
-                <button 
-                    className="export-button" 
-                    onClick={exportToExcel}
-                    disabled={selectedCustomers.length === 0}
-                    >
-                    Export Selected to Excel
-                </button>
+              <button 
+                className="copy-emails-button" 
+                onClick={copySelectedEmails}
+                disabled={selectedCustomers.length === 0}
+              >Copy Selected Emails</button><button 
+                className="export-button" 
+                onClick={exportToExcel}
+                disabled={selectedCustomers.length === 0}
+              >Export Selected to Excel</button>
             </div>
             <div className="page-size-control">
                 <label htmlFor="page-size">Show:</label>
