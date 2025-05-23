@@ -11,23 +11,20 @@ const Analytics: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   // Fetch customers with pagination
   useEffect(() => {
     const fetchCustomers = () => {
       setIsLoading(true);
-      fetch(`/api/customers/?page=${currentPage}&page_size=${pageSize}`)
+      // Fetch with a large page size to get all customers at once
+      fetch(`/api/customers/?page=1&page_size=1000`)
         .then(response => response.json())
         .then(data => {
-          // Check if data.customers exists, otherwise use data directly (same as CustomerList)
           const customerData = data.customers || data;
-          setCustomers(Array.isArray(customerData) ? customerData : []);
-          
-          // Set pagination data
-          if (data.total_pages) setTotalPages(data.total_pages);
-          if (data.current_page) setCurrentPage(data.current_page);
-          
+          const customers = Array.isArray(customerData) ? customerData : [];
+          setCustomers(customers);
           setIsLoading(false);
         })
         .catch(error => {
@@ -37,7 +34,40 @@ const Analytics: React.FC = () => {
     };
 
     fetchCustomers();
-  }, [currentPage, pageSize]);
+  }, []);
+
+  const filteredCustomers = searchTerm 
+      ? customers.filter(customer => 
+          customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          customer.email.toLowerCase().includes(searchTerm.toLowerCase()))
+      : customers;
+
+  const renderSearchInput = () => (
+    <div className="search-container">
+        <input
+            type="text"
+            placeholder="Search customers..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+        />
+    </div>
+  );
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(filteredCustomers.length / pageSize));
+    // Reset to page 1 if current page is now invalid
+    if (currentPage > Math.ceil(filteredCustomers.length / pageSize)) {
+      setCurrentPage(1);
+    }
+  }, [filteredCustomers, pageSize]);
+
+
+  
+  // Get current page data
+  const indexOfLastItem = currentPage * pageSize;
+  const indexOfFirstItem = indexOfLastItem - pageSize;
+  const currentCustomers = filteredCustomers.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleCustomerSelect = (customerId: number) => {
     setSelectedCustomers(prev => {
@@ -202,12 +232,20 @@ const exportToExcel = async () => {
               <p className="summary-value">${calculateTotalCredit()}</p>
             </div>
           </div>
-
           <div className="customer-selection">
             <h2>Select Customers for Analysis</h2>
             
             <div className="table-controls">
-              <div className="page-size-control">
+              {renderSearchInput()}
+                <button 
+                    className="export-button" 
+                    onClick={exportToExcel}
+                    disabled={selectedCustomers.length === 0}
+                    >
+                    Export Selected to Excel
+                </button>
+            </div>
+            <div className="page-size-control">
                 <label htmlFor="page-size">Show:</label>
                 <select
                   id="page-size"
@@ -221,14 +259,6 @@ const exportToExcel = async () => {
                 </select>
                 <span>entries</span>
               </div>
-                <button 
-                    className="export-button" 
-                    onClick={exportToExcel}
-                    disabled={selectedCustomers.length === 0}
-                    >
-                    Export Selected to Excel
-                </button>
-            </div>
             
             <table className="customer-table">
               <thead>
@@ -246,7 +276,7 @@ const exportToExcel = async () => {
                 </tr>
               </thead>
               <tbody>
-                {customers.map(customer => (
+                {currentCustomers.map(customer => (
                   <tr 
                     key={customer.id}
                     className={selectedCustomers.includes(customer.id) ? 'selected' : ''}
