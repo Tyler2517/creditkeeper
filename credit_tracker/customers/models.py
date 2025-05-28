@@ -3,6 +3,8 @@ from django.db import models
 class BusinessOwner(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
+    email = models.EmailField(null=True, blank=True)
+
     
 class Customer(models.Model):
     owner = models.ForeignKey(BusinessOwner, on_delete=models.CASCADE)
